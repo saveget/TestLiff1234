@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
   <title>My LIFF app</title>
   <link rel="stylesheet" href="css/style.css" media="all">
 </head>
+
 <body>
   <p id="os"><b>OS:</b> </p>
   <p id="language"><b>Language:</b> </p>
@@ -35,6 +37,9 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
   <button id="btnClose" onclick="closed()">Close</button>
+  <button id="btnFlexMsg" onclick="sendFlexMessage()">Send Flex Message</button>
+
+
 
   <!-- <script src="js/vconsole.min.js"></script> -->
   <!-- <script>
@@ -95,6 +100,30 @@
       }
     }
 
+    async function sendFlexMessage() {
+      try {
+        if (!globalUserid) {
+          const profile = await liff.getProfile();
+          globalUserid = profile.userId;
+        }
+        const uri = "https://77xbsxqk-3001.asse.devtunnels.ms";
+        const response = await fetch(`${uri}/api/v1/sendflexmessage/${globalUserid}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const result = await response.json();
+        console.log("ส่งส่ ข้อข้ ความสํา เร็จร็:", result);
+        return result;
+      } catch (error) {
+        console.error("เกิดข้อข้ ผิดผิ พลาดในการส่งส่ ข้อข้ ความ:", error);
+      }
+    }
+
     async function main() {
       alert("LINE Developers x Skooldio")
       await liff.init({ liffId: "2007030947-peQemlkA" })
@@ -107,4 +136,5 @@
     main()
   </script>
 </body>
+
 </html>
